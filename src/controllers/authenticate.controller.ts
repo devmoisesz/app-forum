@@ -1,6 +1,5 @@
 import {
   Body,
-  ConflictException,
   Controller,
   HttpCode,
   Post,
@@ -15,7 +14,7 @@ import { JwtService } from "@nestjs/jwt";
 
 export const authenticateBodySchema = z.object({
     email: z.string().email(),
-    password: z.string()
+    password: z.string().min(6)
 })
 
 export type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
@@ -45,7 +44,7 @@ export class AuthenticateController {
 
     const isPasswordValid = await compare(password, user.password)
 
-    if(isPasswordValid){
+    if(!isPasswordValid){
         throw new UnauthorizedException('User credentials do not match')
     }
 
