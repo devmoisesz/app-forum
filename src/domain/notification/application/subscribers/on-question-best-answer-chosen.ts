@@ -1,7 +1,7 @@
 import { EventHandler } from "@/src/core/events/event-handler";
 import type { SendNotificationUseCase } from "../use-cases/send-notification";
 import { AnswerRepository } from "@/src/domain/forum/application/repositories/answers-repository";
-import { QuestionBestQuestionChosenEvent } from "@/src/domain/forum/events/question-best-answer-chosen-event";
+import { QuestionBestAnswerChosenEvent } from "@/src/domain/forum/events/question-best-answer-chosen-event";
 import { DomainEvents } from "@/src/core/events/domain-events";
 
 export class OnQuestionBestAnswerChosen implements EventHandler {
@@ -15,14 +15,14 @@ export class OnQuestionBestAnswerChosen implements EventHandler {
   setupSubscriptions(): void {
     DomainEvents.register(
       this.sendNewQuestionBestAnswerNotification.bind(this),
-      QuestionBestQuestionChosenEvent.name,
+      QuestionBestAnswerChosenEvent.name,
     );
   }
 
   private async sendNewQuestionBestAnswerNotification({
     question,
     bestAnswerId,
-  }: QuestionBestQuestionChosenEvent) {
+  }: QuestionBestAnswerChosenEvent) {
     const answer = await this.answerRepository.findById(
       bestAnswerId.toString(),
     );

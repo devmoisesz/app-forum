@@ -2,7 +2,7 @@ import type { Question } from "../enterprise/entities/question";
 import { UniqueEntityID } from "@/src/core/entities/unique-entity-id";
 import { DomainEvent } from "@/src/core/events/domain-event";
 
-export class QuestionBestQuestionChosenEvent implements DomainEvent {
+export class QuestionBestAnswerChosenEvent implements DomainEvent {
     public ocurredAt: Date
     public question: Question
     public bestAnswerId: UniqueEntityID

@@ -1,6 +1,6 @@
 import { UniqueEntityID } from '@/src/core/entities/unique-entity-id'
 import { Question, QuestionProps } from '@/src/domain/forum/enterprise/entities/question'
-import { Slug } from '@/src/types/slug'
+import { Slug } from '@/src/domain/forum/enterprise/entities/value-objects/slug'
 import { faker } from '@faker-js/faker'
 
 export function makeQuestion(
