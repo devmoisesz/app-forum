@@ -1,16 +1,10 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseGuards,
-} from "@nestjs/common";
+import { BadRequestException, Body, Controller, Post, UseGuards } from "@nestjs/common";
 import z from "zod";
 import { ZodValidationPipes } from "../pipes/zod-validation-pipe";
 import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { CurrentUser } from "../../auth/current-user-decorator";
 import type { UserPayload } from "../../auth/jwt.strategy";
 import { CreateQuestionUseCase } from "@/src/domain/forum/application/use-cases/create-question";
-
 
 const createQuestionBodySchema = z.object({
   title: z.string(),
@@ -19,26 +13,29 @@ const createQuestionBodySchema = z.object({
 
 type CreateQuestionBodySchema = z.infer<typeof createQuestionBodySchema>;
 
-const bodyValidationPipe = new ZodValidationPipes(createQuestionBodySchema)
+const bodyValidationPipe = new ZodValidationPipes(createQuestionBodySchema);
 
 @Controller("/questions")
-@UseGuards(JwtAuthGuard)
 export class CreateQuestionController {
   constructor(private createQuestion: CreateQuestionUseCase) {}
 
   @Post()
   async handle(
     @CurrentUser() user: UserPayload,
-    @Body(bodyValidationPipe) body: CreateQuestionBodySchema
+    @Body(bodyValidationPipe) body: CreateQuestionBodySchema,
   ) {
-    const { title, content } = body
-    const userId = user.sub
+    const { title, content } = body;
+    const userId = user.sub;
 
-    await this.createQuestion.execute({
+    const result = await this.createQuestion.execute({
       title,
       content,
       authorId: userId,
-      attachmentsIds: []
-    })
+      attachmentsIds: [],
+    });
+
+    if (result.isLeft()) {
+      throw new BadRequestException();
+    }
   }
 }
