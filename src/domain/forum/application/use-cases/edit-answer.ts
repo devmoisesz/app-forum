@@ -1,7 +1,7 @@
-import type { Answer } from "../../enterprise/entities/answer";
-import type { AnswerRepository } from "../repositories/answers-repository";
+import { Answer } from "../../enterprise/entities/answer";
+import { AnswerRepository } from "../repositories/answers-repository";
 import { AnswerAttachmentList } from "../../../forum/enterprise/entities/answer-attachment-list";
-import type { AnswerAttachmentRepository } from "../repositories/answer-attchments-repository";
+import { AnswerAttachmentRepository } from "../repositories/answer-attchments-repository";
 import { AnswerAttachment } from "../../enterprise/entities/answer-attachment";
 import { NotAllowedError } from "@/src/core/error/errors/not-allowed-error";
 import { Either, left, right } from "@/src/core/either";

@@ -1,6 +1,6 @@
 import { Either, right } from "@/src/core/either";
-import type { Answer } from "../../enterprise/entities/answer";
-import type { AnswerRepository } from "../repositories/answers-repository";
+import { Answer } from "../../enterprise/entities/answer";
+import { AnswerRepository } from "../repositories/answers-repository";
 
 
 interface ListAnswersOfQuestionUseCaseRequest {

@@ -1,6 +1,6 @@
 import { Either, right } from "@/src/core/either";
-import type { AnswerComment } from "../../enterprise/entities/answer-comment";
-import type { AnswerCommentRepository } from "../repositories/answer-comment-repository";
+import { AnswerComment } from "../../enterprise/entities/answer-comment";
+import { AnswerCommentRepository } from "../repositories/answer-comment-repository";
 
 
 interface ListAnswerCommentsUseCaseRequest {

@@ -1,6 +1,6 @@
-import type { Question } from "../../enterprise/entities/question";
-import type { QuestionsRepository } from "../repositories/question-repository";
-import type { QuestionAttachmentRepository } from "../repositories/question-attchments-repository";
+import { Question } from "../../enterprise/entities/question";
+import { QuestionsRepository } from "../repositories/question-repository";
+import { QuestionAttachmentRepository } from "../repositories/question-attchments-repository";
 import { QuestionAttachmentList } from "../../../forum/enterprise/entities/question-attachment-list";
 import { QuestionAttachment } from "../../enterprise/entities/question-attachment";
 import { Either, left, right } from "@/src/core/either";

@@ -1,4 +1,4 @@
-import type { AnswerRepository } from "../repositories/answers-repository";
+import { AnswerRepository } from "../repositories/answers-repository";
 import { AnswerAttachment } from "../../enterprise/entities/answer-attachment";
 import { Either, right } from "@/src/core/either";
 import { UniqueEntityID } from "@/src/core/entities/unique-entity-id";
