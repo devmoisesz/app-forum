@@ -1,17 +1,17 @@
 import { InMemoryQuestionRepository } from "../../../../../test/repositories-in-memory/in-memory-questions-repository";
 import { InMemoryAnswerRepository } from "../../../../../test/repositories-in-memory/in-memory-answers-repository";
-import { ChosseQuestionBestAnswerUseCase } from "./chosse-question-best-answer";
 import { makeAnswer } from "../../../../../test/factories/make-answer";
 import { makeQuestion } from "../../../../../test/factories/make-question";
 import { NotAllowedError } from "@/src/core/error/errors/not-allowed-error";
 import { InMemoryQuestionAttachmentRepository } from "../../../../../test/repositories-in-memory/in-memory-question-attachments-repository";
 import { InMemoryAnswerAttachmentRepository } from "../../../../../test/repositories-in-memory/in-memory-answer-attachments-repository";
+import { ChooseQuestionBestAnswerUseCase } from "./choose-question-best-answer";
 
 let answersAttachmentsRepository: InMemoryAnswerAttachmentRepository;
 let questionsRepository: InMemoryQuestionRepository;
 let answerRepository: InMemoryAnswerRepository;
 let questionAttachmentRepository: InMemoryQuestionAttachmentRepository;
-let chosseQuestionBestAnswerUseCase: ChosseQuestionBestAnswerUseCase;
+let chooseQuestionBestAnswerUseCase: ChooseQuestionBestAnswerUseCase;
 
 describe("Chosse Question Best Answer", () => {
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe("Chosse Question Best Answer", () => {
       answersAttachmentsRepository,
     );
 
-    chosseQuestionBestAnswerUseCase = new ChosseQuestionBestAnswerUseCase(
+    chooseQuestionBestAnswerUseCase = new ChooseQuestionBestAnswerUseCase(
       questionsRepository,
       answerRepository,
     );
@@ -39,7 +39,7 @@ describe("Chosse Question Best Answer", () => {
     await questionsRepository.create(question);
     await answerRepository.create(answer);
 
-    await chosseQuestionBestAnswerUseCase.execute({
+    await chooseQuestionBestAnswerUseCase.execute({
       answerId: answer.id.toString(),
       authorId: question.authorId.toString(),
     });
@@ -56,7 +56,7 @@ describe("Chosse Question Best Answer", () => {
     await questionsRepository.create(question);
     await answerRepository.create(answer);
 
-    const result = await chosseQuestionBestAnswerUseCase.execute({
+    const result = await chooseQuestionBestAnswerUseCase.execute({
       answerId: answer.id.toString(),
       authorId: "author-2",
     });
