@@ -25,6 +25,10 @@ import { ListAnswersOfQuestionController } from "./controllers/list-answers-ques
 import { ListAnswersOfQuestionUseCase } from "@/src/domain/forum/application/use-cases/list-answers-question";
 import { ChooseQuestionBestAnswerController } from "./controllers/choose-question-best-answer.controller";
 import { ChooseQuestionBestAnswerUseCase } from "@/src/domain/forum/application/use-cases/choose-question-best-answer";
+import { CommentOnQuestionController } from "./controllers/comment-on-question.controller";
+import { CommentOnAnswerUseCase } from "@/src/domain/forum/application/use-cases/comment-on-answer";
+import { CommentOnQuestionUseCase } from "@/src/domain/forum/application/use-cases/comment-on-question";
+import { CommentOnAnswerController } from "./controllers/comment-on-answer.controller";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -40,7 +44,9 @@ import { ChooseQuestionBestAnswerUseCase } from "@/src/domain/forum/application/
     EditAnswerController,
     DeleteAnswerController,
     ListAnswersOfQuestionController,
-    ChooseQuestionBestAnswerController
+    ChooseQuestionBestAnswerController,
+    CommentOnQuestionController,
+    CommentOnAnswerController
   ],
   providers: [
     CreateQuestionUseCase,
@@ -54,7 +60,9 @@ import { ChooseQuestionBestAnswerUseCase } from "@/src/domain/forum/application/
     EditAnswerUseCase,
     DeleteAnswerUseCase,
     ListAnswersOfQuestionUseCase,
-    ChooseQuestionBestAnswerUseCase
+    ChooseQuestionBestAnswerUseCase,
+    CommentOnQuestionUseCase,
+    CommentOnAnswerUseCase
   ],
 })
 export class HttpModule {}
