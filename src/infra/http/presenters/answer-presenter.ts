@@ -6,7 +6,7 @@ export class AnswerPresenter {
             id: answer.id.toString(),
             content: answer.content,
             createdAt: answer.createdAt,
-            updateAt: answer.updateAt
+            updatedAt: answer.updatedAt
         }
     }
 }

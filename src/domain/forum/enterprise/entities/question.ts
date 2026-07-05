@@ -14,7 +14,7 @@ export interface QuestionProps {
   slug: Slug
   createdAt: Date
   attachments: QuestionAttachmentList
-  updateAt?: Date | null
+  updatedAt?: Date | null
 }
 
 export class Question extends AggregateRoot<QuestionProps> {
@@ -46,8 +46,8 @@ export class Question extends AggregateRoot<QuestionProps> {
     return this.props.createdAt
   }
 
-  get updateAt() {
-    return this.props.updateAt
+  get updatedAt() {
+    return this.props.updatedAt
   }
 
   get isNew(): boolean {

@@ -46,8 +46,8 @@ export class Answer extends AggregateRoot<AnswerProps> {
     return this.props.createdAt
   }
 
-  get updateAt() {
-    return this.props.updateAt
+  get updatedAt() {
+    return this.props.updatedAt
   }
 
   get excerpt() {
