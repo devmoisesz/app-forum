@@ -2,46 +2,43 @@ import { INestApplication } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
-import { PrismaService } from "../../database/prisma/prisma.service";
 import { AppModule } from "../../app.module";
+import { StudentFactory } from "@/test/factories/make-student";
+import { DatabaseModule } from "../../database/database.module";
+import { QuestionFactory } from "@/test/factories/make-question";
+import { Slug } from "@/src/domain/forum/enterprise/entities/value-objects/slug";
 
 describe("Get question by slug (E2E)", () => {
   let app: INestApplication;
-  let prisma: PrismaService;
+  let studentFactory: StudentFactory
+  let questionFactory: QuestionFactory
   let jwt: JwtService;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, DatabaseModule],
+      providers: [StudentFactory, QuestionFactory]
     }).compile();
 
     app = moduleRef.createNestApplication();
 
-    prisma = moduleRef.get(PrismaService);
+    studentFactory = moduleRef.get(StudentFactory)
+    questionFactory = moduleRef.get(QuestionFactory)
     jwt = moduleRef.get(JwtService);
 
     await app.init();
   });
 
   test("[GET] /questions:slug", async () => {
-    const user = await prisma.user.create({
-      data: {
-        name: "John doe",
-        email: "john@example.com",
-        password: "123456",
-      },
-    });
+    const user = await studentFactory.makePrismaStudent()
 
-    const accessToken = jwt.sign({ sub: user.id });
+    const accessToken = jwt.sign({ sub: user.id.toString() });
 
-    await prisma.question.create({
-      data: {
-        title: "question 1",
-        slug: "question-1",
-        content: "content",
-        authorId: user.id,
-      },
-    });
+    await questionFactory.makePrismaQuestion({
+      title: 'question 1',
+      authorId: user.id,
+      slug: Slug.create('question-1')
+    })
 
     const response = await request(app.getHttpServer())
       .get(`/questions/question-1`)
