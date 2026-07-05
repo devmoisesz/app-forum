@@ -1,7 +1,6 @@
-import { BadRequestException, Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Post } from "@nestjs/common";
 import z from "zod";
 import { ZodValidationPipes } from "../pipes/zod-validation-pipe";
-import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { CurrentUser } from "../../auth/current-user-decorator";
 import type { UserPayload } from "../../auth/jwt.strategy";
 import { CreateQuestionUseCase } from "@/src/domain/forum/application/use-cases/create-question";
