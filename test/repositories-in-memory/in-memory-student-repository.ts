@@ -2,7 +2,7 @@ import { DomainEvents } from "@/src/core/events/domain-events";
 import { StudentsRepository } from "@/src/domain/forum/application/repositories/students-repository";
 import { Student } from "@/src/domain/forum/enterprise/entities/student";
 
-export class InMemoryStudentRepositoty implements StudentsRepository {
+export class InMemoryStudentRepository implements StudentsRepository {
   public items: Student[] = [];
 
   constructor(
