@@ -7,6 +7,7 @@ import { NotAllowedError } from "@/src/core/error/errors/not-allowed-error";
 import { Either, left, right } from "@/src/core/either";
 import { ResourceNotFoundError } from "@/src/core/error/errors/resource-not-found-error";
 import { UniqueEntityID } from "@/src/core/entities/unique-entity-id";
+import { Injectable } from "@nestjs/common";
 
 interface EditAnswerUseCaseRequest {
   authorId: string;
@@ -22,6 +23,7 @@ type EditAnswerUseCaseResponse = Either<
   }
 >;
 
+@Injectable()
 export class EditAnswerUseCase {
   constructor(
     private answersRepository: AnswerRepository,

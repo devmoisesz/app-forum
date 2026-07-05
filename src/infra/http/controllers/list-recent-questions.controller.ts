@@ -1,7 +1,6 @@
 import { BadRequestException, Controller, Get, Query, UseGuards } from "@nestjs/common";
 import z from "zod";
 import { ZodValidationPipes } from "../pipes/zod-validation-pipe";
-import { JwtAuthGuard } from "../../auth/jwt-auth.guard";
 import { ListRecentQuestionsUseCase } from "@/src/domain/forum/application/use-cases/list-recent-questions";
 import { QuestionPresenter } from "../presenters/question-presenter";
 
