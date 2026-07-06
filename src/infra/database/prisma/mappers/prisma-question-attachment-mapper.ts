@@ -4,8 +4,8 @@ import { Attachment as PrismaAttachment, Prisma } from "@prisma/client";
 
 export class PrismaQuestionAttachmentsMapper {
   static toDomain(raw: PrismaAttachment): QuestionAttachment {
-    if(!raw.questionId){
-        throw new Error('Invalid attachment type')
+    if (!raw.questionId) {
+      throw new Error("Invalid attachment type");
     }
 
     return QuestionAttachment.create(
@@ -15,5 +15,24 @@ export class PrismaQuestionAttachmentsMapper {
       },
       new UniqueEntityID(raw.id),
     );
+  }
+
+  static toPrismaUpdateMany(
+    attachments: QuestionAttachment[],
+  ): Prisma.AttachmentUpdateManyArgs {
+    const attachmentIds = attachments.map((attachment) => {
+      return attachment.attachmentId.toString();
+    });
+
+    return {
+      where: {
+        id: {
+          in: attachmentIds,
+        },
+      },
+      data: {
+        questionId: attachments[0].questionId.toString(),
+      },
+    };
   }
 }

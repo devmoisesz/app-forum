@@ -4,10 +4,14 @@ import { Question } from "@/src/domain/forum/enterprise/entities/question";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { PrismaQuestionMapper } from "../mappers/prisma-question-mapper";
+import { QuestionAttachmentRepository } from "@/src/domain/forum/application/repositories/question-attchments-repository";
 
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private questionAttachmentsRepository: QuestionAttachmentRepository,
+  ) {}
 
   async findById(id: string) {
     const question = await this.prisma.question.findUnique({
@@ -36,39 +40,51 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   async findManyRecent({ page }: PaginationParams) {
     const questions = await this.prisma.question.findMany({
       orderBy: {
-        createdAt: 'desc'
+        createdAt: "desc",
       },
       take: 20,
-      skip: (page - 1) * 20
+      skip: (page - 1) * 20,
     });
 
-    return questions.map(PrismaQuestionMapper.toDomain)
+    return questions.map(PrismaQuestionMapper.toDomain);
   }
 
   async create(question: Question) {
-    const data = PrismaQuestionMapper.toPrisma(question)
+    const data = PrismaQuestionMapper.toPrisma(question);
 
     await this.prisma.question.create({
-        data,
-    })
+      data,
+    });
+
+    await this.questionAttachmentsRepository.createMany(
+      question.attachments.getItems(),
+    );
   }
 
   async delete(question: Question) {
     await this.prisma.question.delete({
-        where: {
-            id: question.id.toString()
-        }
-    })
+      where: {
+        id: question.id.toString(),
+      },
+    });
   }
 
   async save(question: Question) {
-    const data = PrismaQuestionMapper.toPrisma(question)
+    const data = PrismaQuestionMapper.toPrisma(question);
 
-    await this.prisma.question.update({
+    await Promise.all([
+      this.prisma.question.update({
         where: {
-            id: data.id,
+          id: data.id,
         },
         data,
-    })
+      }),
+      this.questionAttachmentsRepository.createMany(
+        question.attachments.getNewItems(),
+      ),
+      this.questionAttachmentsRepository.deleteMany(
+        question.attachments.getRemovedItems(),
+      ),
+    ]);
   }
 }

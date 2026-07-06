@@ -1,22 +1,34 @@
-import { QuestionAttachmentRepository } from "@/src/domain/forum/application/repositories/question-attchments-repository"
-import { QuestionAttachment } from "@/src/domain/forum/enterprise/entities/question-attachment"
+import { QuestionAttachmentRepository } from "@/src/domain/forum/application/repositories/question-attchments-repository";
+import { QuestionAttachment } from "@/src/domain/forum/enterprise/entities/question-attachment";
 
 export class InMemoryQuestionAttachmentRepository implements QuestionAttachmentRepository {
-    public items: QuestionAttachment[] = []
+  public items: QuestionAttachment[] = [];
 
-    async deleteManyByQuestionId(questionId: string) {
-        const questionAttachments = this.items.filter(
-            (item) => item.questionId.toString() != questionId
-        )
-        
-        this.items = questionAttachments
-    }
+  async createMany(attachments: QuestionAttachment[]): Promise<void> {
+    this.items.push(...attachments);
+  }
 
-    async findManyByQuestionId(questionId: string) {
-        const questionAttachments = this.items.filter(
-            (item) => item.questionId.toString() === questionId
-        )
-        
-        return questionAttachments
-    }
+  async deleteMany(attachments: QuestionAttachment[]): Promise<void> {
+    const questionAttachments = this.items.filter((item) => {
+        return !attachments.some((attachment) => attachment.equals(item))
+    })
+
+    this.items = questionAttachments
+  }
+
+  async deleteManyByQuestionId(questionId: string) {
+    const questionAttachments = this.items.filter(
+      (item) => item.questionId.toString() != questionId,
+    );
+
+    this.items = questionAttachments;
+  }
+
+  async findManyByQuestionId(questionId: string) {
+    const questionAttachments = this.items.filter(
+      (item) => item.questionId.toString() === questionId,
+    );
+
+    return questionAttachments;
+  }
 }

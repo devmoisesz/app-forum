@@ -8,9 +8,7 @@ import { PrismaAnswerAttachmentsMapper } from "../mappers/prisma-answer-attachme
 export class PrismaAnswerAttachmentsRepository implements AnswerAttachmentRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findManyByAnswerId(
-    answerId: string,
-  ): Promise<AnswerAttachment[]> {
+  async findManyByAnswerId(answerId: string): Promise<AnswerAttachment[]> {
     const answerAttachments = await this.prisma.attachment.findMany({
       where: {
         answerId,
@@ -24,6 +22,35 @@ export class PrismaAnswerAttachmentsRepository implements AnswerAttachmentReposi
     await this.prisma.attachment.deleteMany({
       where: {
         answerId,
+      },
+    });
+  }
+
+  async createMany(attachments: AnswerAttachment[]): Promise<void> {
+    if (attachments.length === 0) {
+      return;
+    }
+
+    const data =
+      PrismaAnswerAttachmentsMapper.toPrismaUpdateMany(attachments);
+
+    await this.prisma.attachment.updateMany(data);
+  }
+
+  async deleteMany(attachments: AnswerAttachment[]): Promise<void> {
+    if (attachments.length === 0) {
+      return;
+    }
+
+    const attachmentIds = attachments.map((attachment) => {
+      return attachment.id.toString();
+    });
+
+    await this.prisma.attachment.deleteMany({
+      where: {
+        id: {
+          in: attachmentIds,
+        },
       },
     });
   }
