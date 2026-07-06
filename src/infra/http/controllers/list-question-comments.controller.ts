@@ -2,7 +2,7 @@ import { BadRequestException, Controller, Get, Param, Query, UseGuards } from "@
 import z from "zod";
 import { ZodValidationPipes } from "../pipes/zod-validation-pipe";
 import { ListQuestionCommentsUseCase } from "@/src/domain/forum/application/use-cases/list-question-comment";
-import { CommentPresenter } from "../presenters/comment-presenter";
+import { CommentWithAuthorPresenter } from "../presenters/comment-with-author-presenter";
 
 const pageQueryParamSchema = z
   .string()
@@ -33,8 +33,8 @@ export class ListQuestionCommentsController {
       throw new BadRequestException()
     }
 
-    const questionComments = result.value.questionComments
+    const questionComments = result.value.comments
 
-    return { comments: questionComments.map(CommentPresenter.toHTTP)}
+    return { comments: questionComments.map(CommentWithAuthorPresenter.toHTTP)}
   }
 }
