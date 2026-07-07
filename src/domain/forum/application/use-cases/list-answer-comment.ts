@@ -2,6 +2,7 @@ import { Either, right } from "@/src/core/either";
 import { AnswerComment } from "../../enterprise/entities/answer-comment";
 import { AnswerCommentRepository } from "../repositories/answer-comment-repository";
 import { Injectable } from "@nestjs/common";
+import { CommentWithAuthor } from "../../enterprise/entities/value-objects/comment-with-author";
 
 
 interface ListAnswerCommentsUseCaseRequest {
@@ -11,7 +12,7 @@ interface ListAnswerCommentsUseCaseRequest {
 type ListAnswerCommentsUseCaseResponse = Either<
   null,
   {
-    answerComments: AnswerComment[] 
+    comments: CommentWithAuthor[] 
   }
 >
 
@@ -23,10 +24,10 @@ export class ListAnswerCommentsUseCase {
     answerId,
     page
   }: ListAnswerCommentsUseCaseRequest): Promise<ListAnswerCommentsUseCaseResponse> {
-    const answerComments = await this.answerCommentRepository.findManyByAnswerId(answerId, {page})
+    const comments = await this.answerCommentRepository.findManyByAnswerIdWithAuthor(answerId, {page})
 
     return right({
-      answerComments
+      comments
     })
   }
 }

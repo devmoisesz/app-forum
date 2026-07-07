@@ -3,6 +3,8 @@ import z from "zod";
 import { ZodValidationPipes } from "../pipes/zod-validation-pipe";
 import { ListAnswerCommentsUseCase } from "@/src/domain/forum/application/use-cases/list-answer-comment";
 import { CommentPresenter } from "../presenters/comment-presenter";
+import { CommentWithAuthor } from "@/src/domain/forum/enterprise/entities/value-objects/comment-with-author";
+import { CommentWithAuthorPresenter } from "../presenters/comment-with-author-presenter";
 
 const pageQueryParamSchema = z
   .string()
@@ -33,8 +35,8 @@ export class ListAnswerCommentsController {
       throw new BadRequestException()
     }
 
-    const answerComments = result.value.answerComments
+    const comments = result.value.comments
 
-    return { comments: answerComments.map(CommentPresenter.toHTTP)}
+    return { comments: comments.map(CommentWithAuthorPresenter.toHTTP)}
   }
 }

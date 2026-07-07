@@ -33,7 +33,7 @@ describe("List question comments (E2E)", () => {
 
   test("[GET] /questions/:questionId/comments", async () => {
     const user = await studentFactory.makePrismaStudent({
-      name: "John doe",
+      name: "John Doe",
     });
 
     const accessToken = jwt.sign({ sub: user.id.toString() });
@@ -42,17 +42,18 @@ describe("List question comments (E2E)", () => {
       authorId: user.id,
     });
 
-    await questionCommentFactory.makePrismaQuestionComment({
-      authorId: user.id,
-      questionId: question.id,
-      content: "Comment 1",
-    });
-
-    await questionCommentFactory.makePrismaQuestionComment({
-      authorId: user.id,
-      questionId: question.id,
-      content: "Comment 2",
-    });
+    await Promise.all([
+      questionCommentFactory.makePrismaQuestionComment({
+        authorId: user.id,
+        questionId: question.id,
+        content: "Comment 1",
+      }),
+      questionCommentFactory.makePrismaQuestionComment({
+        authorId: user.id,
+        questionId: question.id,
+        content: "Comment 2",
+      }),
+    ]);
 
     const questionId = question.id.toString();
 
@@ -70,7 +71,7 @@ describe("List question comments (E2E)", () => {
         }),
         expect.objectContaining({
           content: "Comment 2",
-          authorName: "John DOe",
+          authorName: "John Doe",
         }),
       ]),
     });
