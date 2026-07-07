@@ -5,16 +5,24 @@ import { makeQuestion } from "@/test/factories/make-question";
 import { UniqueEntityID } from "@/src/core/entities/unique-entity-id";
 import { makeQuestionAttachment } from "@/test/factories/make-question-attachment";
 import { NotAllowedError } from "@/src/core/error/errors/not-allowed-error";
+import { InMemoryStudentRepository } from "@/test/repositories-in-memory/in-memory-student-repository";
+import { InMemoryAttachmentRepository } from "@/test/repositories-in-memory/in-memory-attachments-repository";
 
 let questionsRepository: InMemoryQuestionRepository;
 let questionAttachmentRepository: InMemoryQuestionAttachmentRepository;
 let editQuestionUseCase: EditQuestionUseCase;
+let attachmentsRepository: InMemoryAttachmentRepository;
+let studentRepository: InMemoryStudentRepository;
 
 describe("Edit Question", () => {
   beforeEach(() => {
     questionAttachmentRepository = new InMemoryQuestionAttachmentRepository();
+    attachmentsRepository = new InMemoryAttachmentRepository();
+    studentRepository = new InMemoryStudentRepository();
     questionsRepository = new InMemoryQuestionRepository(
       questionAttachmentRepository,
+      attachmentsRepository,
+      studentRepository
     );
 
     editQuestionUseCase = new EditQuestionUseCase(

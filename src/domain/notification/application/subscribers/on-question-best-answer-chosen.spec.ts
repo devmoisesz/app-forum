@@ -1,55 +1,72 @@
-import { MockInstance } from "vitest"
-import { SendNotificationUseCase, SendNotificationUseCaseRequest, SendNotificationUseCaseResponse } from "../use-cases/send-notification"
-import { InMemoryQuestionAttachmentRepository } from "@/test/repositories-in-memory/in-memory-question-attachments-repository"
-import { InMemoryAnswerAttachmentRepository } from "@/test/repositories-in-memory/in-memory-answer-attachments-repository"
-import { InMemoryQuestionRepository } from "@/test/repositories-in-memory/in-memory-questions-repository"
-import { InMemoryAnswerRepository } from "@/test/repositories-in-memory/in-memory-answers-repository"
-import { InMemoryNotificationRepository } from "@/test/repositories-in-memory/in-memory-notification-repository"
-import { OnQuestionBestAnswerChosen } from "./on-question-best-answer-chosen"
-import { makeQuestion } from "@/test/factories/make-question"
-import { makeAnswer } from "@/test/factories/make-answer"
-import { waitFor } from "@/test/utils/wait-for"
+import { MockInstance } from "vitest";
+import {
+  SendNotificationUseCase,
+  SendNotificationUseCaseRequest,
+  SendNotificationUseCaseResponse,
+} from "../use-cases/send-notification";
+import { InMemoryQuestionAttachmentRepository } from "@/test/repositories-in-memory/in-memory-question-attachments-repository";
+import { InMemoryAnswerAttachmentRepository } from "@/test/repositories-in-memory/in-memory-answer-attachments-repository";
+import { InMemoryQuestionRepository } from "@/test/repositories-in-memory/in-memory-questions-repository";
+import { InMemoryAnswerRepository } from "@/test/repositories-in-memory/in-memory-answers-repository";
+import { InMemoryNotificationRepository } from "@/test/repositories-in-memory/in-memory-notification-repository";
+import { OnQuestionBestAnswerChosen } from "./on-question-best-answer-chosen";
+import { makeQuestion } from "@/test/factories/make-question";
+import { makeAnswer } from "@/test/factories/make-answer";
+import { waitFor } from "@/test/utils/wait-for";
+import { InMemoryAttachmentRepository } from "@/test/repositories-in-memory/in-memory-attachments-repository";
+import { InMemoryStudentRepository } from "@/test/repositories-in-memory/in-memory-student-repository";
 
-
-let questionsAttachmentRepository: InMemoryQuestionAttachmentRepository
-let questionsRepository: InMemoryQuestionRepository
-let answerAttachmentsRepository: InMemoryAnswerAttachmentRepository
-let answerRepository: InMemoryAnswerRepository
-let notificationRepository: InMemoryNotificationRepository
-let sendNotificationUseCase: SendNotificationUseCase
+let questionsAttachmentRepository: InMemoryQuestionAttachmentRepository;
+let questionsRepository: InMemoryQuestionRepository;
+let answerAttachmentsRepository: InMemoryAnswerAttachmentRepository;
+let answerRepository: InMemoryAnswerRepository;
+let notificationRepository: InMemoryNotificationRepository;
+let sendNotificationUseCase: SendNotificationUseCase;
+let attachmentsRepository: InMemoryAttachmentRepository;
+let studentRepository: InMemoryStudentRepository;
 
 let sendNotificationExecuteSpy: MockInstance<
-    (
-        request: SendNotificationUseCaseRequest,
-    ) => Promise<SendNotificationUseCaseResponse>
->
+  (
+    request: SendNotificationUseCaseRequest,
+  ) => Promise<SendNotificationUseCaseResponse>
+>;
 
-describe('On Question Best Answer Chosen', () => {
-    beforeEach(() => {
-        questionsAttachmentRepository = new InMemoryQuestionAttachmentRepository()
-        questionsRepository = new InMemoryQuestionRepository(questionsAttachmentRepository)
-        answerAttachmentsRepository = new InMemoryAnswerAttachmentRepository()
-        answerRepository = new InMemoryAnswerRepository(answerAttachmentsRepository)
-        notificationRepository = new InMemoryNotificationRepository()
-        sendNotificationUseCase = new SendNotificationUseCase(notificationRepository)
+describe("On Question Best Answer Chosen", () => {
+  beforeEach(() => {
+    questionsAttachmentRepository = new InMemoryQuestionAttachmentRepository();
+    attachmentsRepository = new InMemoryAttachmentRepository();
+    studentRepository = new InMemoryStudentRepository();
+    questionsRepository = new InMemoryQuestionRepository(
+      questionsAttachmentRepository,
+      attachmentsRepository,
+      studentRepository,
+    );
+    answerAttachmentsRepository = new InMemoryAnswerAttachmentRepository();
+    answerRepository = new InMemoryAnswerRepository(
+      answerAttachmentsRepository,
+    );
+    notificationRepository = new InMemoryNotificationRepository();
+    sendNotificationUseCase = new SendNotificationUseCase(
+      notificationRepository,
+    );
 
-        sendNotificationExecuteSpy = vi.spyOn(sendNotificationUseCase, 'execute')
+    sendNotificationExecuteSpy = vi.spyOn(sendNotificationUseCase, "execute");
 
-        new OnQuestionBestAnswerChosen(answerRepository, sendNotificationUseCase)
-    })
-    it('should send a notification when topic has new best answer chosen', async () => {
-        const question = makeQuestion()
-        const answer = makeAnswer({ questionId: question.id})
+    new OnQuestionBestAnswerChosen(answerRepository, sendNotificationUseCase);
+  });
+  it("should send a notification when topic has new best answer chosen", async () => {
+    const question = makeQuestion();
+    const answer = makeAnswer({ questionId: question.id });
 
-        questionsRepository.create(question)
-        answerRepository.create(answer)
+    questionsRepository.create(question);
+    answerRepository.create(answer);
 
-        question.bestAnswerId = answer.id
+    question.bestAnswerId = answer.id;
 
-        questionsRepository.save(question)
+    questionsRepository.save(question);
 
-        await waitFor(() => {
-            expect(sendNotificationExecuteSpy).toHaveBeenCalled()
-        })
-    })
-})
+    await waitFor(() => {
+      expect(sendNotificationExecuteSpy).toHaveBeenCalled();
+    });
+  });
+});

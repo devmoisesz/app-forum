@@ -3,7 +3,7 @@ import { PaginationParams } from "@/src/core/repositories/pagination-params";
 import { QuestionAttachmentRepository } from "@/src/domain/forum/application/repositories/question-attchments-repository";
 import { QuestionsRepository } from "@/src/domain/forum/application/repositories/question-repository";
 import { Question } from "@/src/domain/forum/enterprise/entities/question";
-import { InMemoryAttachmenttRepository } from "./in-memory-attachments-repository";
+import { InMemoryAttachmentRepository } from "./in-memory-attachments-repository";
 import { InMemoryStudentRepository } from "./in-memory-student-repository";
 import { InMemoryQuestionAttachmentRepository } from "./in-memory-question-attachments-repository";
 import { QuestionDetails } from "@/src/domain/forum/enterprise/entities/value-objects/question-details";
@@ -13,7 +13,7 @@ export class InMemoryQuestionRepository implements QuestionsRepository {
 
   constructor(
     private questionAttachmentsRepository: InMemoryQuestionAttachmentRepository,
-    private attachmentsRepository: InMemoryAttachmenttRepository,
+    private attachmentsRepository: InMemoryAttachmentRepository,
     private studentsRepository: InMemoryStudentRepository,
   ) {}
   async findById(id: string) {
