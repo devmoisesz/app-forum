@@ -7,7 +7,7 @@ type PrismaCommentWithAuthor = PrismaComment & {
 }
 
 export class PrismaCommentWithAuthorMapper {
-    static toDomain(raw: any): CommentWithAuthor {
+    static toDomain(raw: PrismaCommentWithAuthor): CommentWithAuthor {
         return CommentWithAuthor.create({
             commentId: new UniqueEntityID(raw.id),
             authorId: new UniqueEntityID(raw.authorId),
