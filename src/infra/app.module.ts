@@ -18,6 +18,5 @@ import { EventsModule } from "./events/events.module";
     EnvModule,
     EventsModule
   ],
-  providers: [EnvService],
 })
 export class AppModule {}

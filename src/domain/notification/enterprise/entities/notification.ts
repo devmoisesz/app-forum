@@ -39,7 +39,7 @@ export class Notification extends Entity<NotificationProps> {
         const notification = new Notification({
             ...props,
             createdAt: props.createdAt ?? new Date()
-        })
+        }, id)
 
         return notification
     }

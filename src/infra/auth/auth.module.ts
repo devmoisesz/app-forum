@@ -10,6 +10,7 @@ import { EnvModule } from "../env/env.module";
 @Module({
   imports: [
     PassportModule,
+    EnvModule,
     JwtModule.registerAsync({
       imports: [EnvModule],
       inject: [EnvService],
@@ -28,7 +29,6 @@ import { EnvModule } from "../env/env.module";
   ],
   providers: [
     JwtStrategy,
-    EnvService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
