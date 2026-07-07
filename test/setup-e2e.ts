@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { randomUUID } from "node:crypto";
 import "dotenv/config";
 import { execSync } from "node:child_process";
+import { DomainEvents } from "@/src/core/events/domain-events";
 
 const prisma = new PrismaClient();
 
@@ -23,6 +24,8 @@ beforeAll(async () => {
     const databaseURL = generateUniqueDatabaseURL(schemaId)
 
     process.env.DATABASE_URL = databaseURL
+
+    DomainEvents.shouldRun = false
 
     execSync('pnpm prisma db push --skip-generate')
 });
