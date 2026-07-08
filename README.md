@@ -58,4 +58,3 @@ O projeto serve como ambiente de estudo para aplicação de conceitos como:
 <p align="center">
   Desenvolvido durante os estudos na <strong>Rocketseat</strong> 🚀
 </p>
-```
